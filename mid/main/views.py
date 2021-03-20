@@ -17,12 +17,13 @@ class BooksViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def create(self, request, **kwargs):
-        book = Book(name=request.data['name'],
-                    price=request.data['price'],
-                    description=request.data.get('description', ''),
-                    num_pages=request.data.get('num_pages', 0),
-                    genre=request.data.get('genre', 'Not Defined'))
-        book.save()
+        if request.user.role == 'SuperAdmin':
+            book = Book(name=request.data['name'],
+                        price=request.data['price'],
+                        description=request.data.get('description', ''),
+                        num_pages=request.data.get('num_pages', 0),
+                        genre=request.data.get('genre', 'Not Defined'))
+            book.save()
         return Response(data=request.data)
 
 
